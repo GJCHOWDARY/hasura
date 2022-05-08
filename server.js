@@ -11,14 +11,18 @@ const cors = require("cors"),
 const PORT = process.env.PORT || 8000;
 
 app.use(compression());
-app.use(helmet());
-
+// app.use(helmet());
 app.use(cors());
-app.use(express.json());
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 app.use(requestHandler);
 app.use(errorHandler);
 
+// app.all('/', (req, res, next) =>{
+//   res.redirect("/graphql");
+// })
 
 app.use(
   "/graphql",
