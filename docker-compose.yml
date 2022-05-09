@@ -1,21 +1,25 @@
 version: '3.6'
 services:
-  postgres:
+  db:
     image: postgres:12
     restart: always
     volumes:
     - db_data:/var/lib/postgresql/data
     environment:
       POSTGRES_PASSWORD: root
+      # POSTGRES_USER: postgres
+      # POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
   graphql-engine:
     image: hasura/graphql-engine:v2.0.1
     ports:
       - "8080:8080"
     depends_on:
-      - "postgres"
+      - "db"
     restart: always
     environment:
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:root@postgres:5432/postgres
+      HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:root@db:5432/postgres
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       HASURA_GRAPHQL_DEV_MODE: "true"
       HASURA_GRAPHQL_ADMIN_SECRET: root

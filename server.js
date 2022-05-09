@@ -5,13 +5,15 @@ const schema = require("./schema");
 const cors = require("cors"),
   compression = require("compression"),
   helmet = require("helmet"),
+  auth = require('./middleware/auth'),
   errorHandler = require('./middleware/error-handler'),
   requestHandler = require('./middleware/request-handler');
 
 const PORT = process.env.PORT || 8000;
 
 app.use(compression());
-// app.use(helmet());
+//Enable Auth
+// app.use(auth);
 app.use(cors());
 
 app.use(express.json())
@@ -20,9 +22,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(requestHandler);
 app.use(errorHandler);
 
-// app.all('/', (req, res, next) =>{
-//   res.redirect("/graphql");
-// })
+app.all('/', (req, res, next) =>{
+  res.redirect("/graphql");
+})
 
 app.use(
   "/graphql",
